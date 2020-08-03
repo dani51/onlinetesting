@@ -29,7 +29,8 @@ class subjects extends Model
         'subject_name',
         'subject_author',
         'total_questions',
-        'subject_test_time'
+        'subject_test_time',
+        'user_id'
     ];
 
     /**
@@ -42,7 +43,8 @@ class subjects extends Model
         'subject_name' => 'string',
         'subject_author' => 'string',
         'subject_test_time' => 'integer',
-        'total_questions' => 'integer'
+        'total_questions' => 'integer',
+        'user_id' => 'integer'
     ];
 
     /**

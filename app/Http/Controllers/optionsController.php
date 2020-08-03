@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateoptionsRequest;
 use App\Http\Requests\UpdateoptionsRequest;
 use App\Models\questions;
+use App\Models\subjects;
 use App\Repositories\optionsRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use Flash;
+use Illuminate\Support\Facades\Auth;
 use Response;
+use DB;
 
 class optionsController extends AppBaseController
 {
@@ -32,9 +35,10 @@ class optionsController extends AppBaseController
     public function index(Request $request)
     {
         $options = $this->optionsRepository->all();
+        $question = subjects::select('id','subject_name')->get();
 
         return view('options.index')
-            ->with('options', $options);
+            ->with('options', $options)->with('question',$question);
     }
 
     /**
@@ -47,8 +51,12 @@ class optionsController extends AppBaseController
         $question=new questions();
         $question=$question->all();
 
-        return view('options.create',compact('question'));
+        $subjects = subjects::select("id","subject_name")->get();
+        
+
+        return view('options.create',compact('question','subjects'));
     }
+    
 
     /**
      * Store a newly created options in storage.
@@ -144,6 +152,7 @@ class optionsController extends AppBaseController
      */
     public function update($id, UpdateoptionsRequest $request)
     {
+
         $options = $this->optionsRepository->find($id);
 
         if (empty($options)) {
@@ -151,8 +160,14 @@ class optionsController extends AppBaseController
 
             return redirect(route('options.index'));
         }
-
-        $options = $this->optionsRepository->update($request->all(), $id);
+        
+        $data_update = $request->all();
+        unset($data_update["_token"]);
+        unset($data_update["_method"]);
+        
+        //  print_r($data_update);
+        // exit();
+        $options = $this->optionsRepository->update($data_update, $id);
 
         Flash::success('Options updated successfully.');
 
@@ -177,11 +192,59 @@ class optionsController extends AppBaseController
 
             return redirect(route('options.index'));
         }
-
-        $this->optionsRepository->delete($id);
-
-        Flash::success('Options deleted successfully.');
-
+        
+        $data = DB::select("SELECT admins.id FROM `admins`,subjects,questions,options where options.id = '$id' && options.question_id = questions.id && questions.subject_id = subjects.id && subjects.user_id = admins.id" ) ;
+        if($data){
+            $get_id = $data[0]->id;
+            $admin_id = Auth::user()->id;   
+            
+            if($get_id === $admin_id){
+                $this->optionsRepository->delete($id);
+                Flash::success('Options deleted successfully.');
+                return redirect(route('options.index'));
+            }
+            else{
+                Flash::error('Options not found');
+            }    
+        }
+        
+        Flash::error('Options not found');
         return redirect(route('options.index'));
+    }
+    
+    public function fetch_options_group(Request $request){
+        
+        //print_r($request->level_id);
+        if(!empty($request->level_id)){
+            
+            $level_id = $request->level_id;
+            $level = trim($level_id);
+            
+            // $data = questions::where('subject_id',$level)->get();
+            //
+            $data = DB::select("SELECT options.* FROM `options` inner JOIN questions on options.question_id = questions.id && questions.subject_id = " . $level ." && options.deleted_at IS Null" ) ;
+
+            $subjects = array();
+            
+            if(!empty($data)){
+                
+                $output = "";
+                foreach ($data as $dataval) {
+                    // <form method="post" action="options/"></form>
+                    $output .= '<tr><td>'. $dataval->question_id .'</td><td> '. $dataval->option_name.' </td><td><div class="btn-group"><a href="/options/{{' . $dataval->id .'}}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-eye-open"></i></a><a href="/options/{{' . $dataval->id .'}}/edit" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-edit"></i></a><a href="/delete_options/' . $dataval->id .'" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i></a></div> </td></tr>'; 
+                }
+
+                echo $output;
+                 
+
+            }
+            
+        }
+        else{
+            echo false; 
+            // echo json_encode(array('status' => 'error'));    
+        }
+        
+        
     }
 }

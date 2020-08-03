@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreatequestionsRequest;
 use App\Http\Requests\UpdatequestionsRequest;
 use App\Models\subjects;
+use App\Models\questions;
 use App\Repositories\questionsRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
@@ -153,17 +154,46 @@ class questionsController extends AppBaseController
     public function destroy($id)
     {
         $questions = $this->questionsRepository->find($id);
-
+        
         if (empty($questions)) {
             Flash::error('Questions not found');
 
             return redirect(route('questions.index'));
         }
-
+        
         $this->questionsRepository->delete($id);
 
         Flash::success('Questions deleted successfully.');
 
         return redirect(route('questions.index'));
+    }
+    public function fetch_question_group(Request $request){
+        
+        //print_r($request->level_id);
+        if(!empty($request->level_id)){
+            
+            $level_id = $request->level_id;
+            $level = trim($level_id);
+            
+            $data = questions::where('subject_id',$level)->get();
+            $subjects = array();
+
+            if(!empty($data)){
+               
+                $output = '<option value=""> Select Question </option>';
+                foreach ($data as $dataval) {
+                    $output .= '<option value="'.$dataval->id.'"> ' . $dataval->question_name .' </option>';
+
+                }
+                echo $output; 
+            }
+            
+        }
+        else{
+            echo false; 
+            // echo json_encode(array('status' => 'error'));    
+        }
+        
+        
     }
 }

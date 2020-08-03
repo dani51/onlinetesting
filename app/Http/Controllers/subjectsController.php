@@ -7,6 +7,7 @@ use App\Http\Requests\UpdatesubjectsRequest;
 use App\Repositories\subjectsRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Flash;
 use Response;
 
@@ -56,7 +57,9 @@ class subjectsController extends AppBaseController
     public function store(CreatesubjectsRequest $request)
     {
         $input = $request->all();
-
+        $user_id = Auth::user()->id;
+        $input["user_id"] = $user_id;
+        
         $subjects = $this->subjectsRepository->create($input);
 
         Flash::success('Subjects saved successfully.');

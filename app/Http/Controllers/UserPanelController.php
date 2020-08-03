@@ -7,6 +7,7 @@ use App\Models\questions;
 use App\Models\subjects;
 use App\result;
 use App\User;
+use App\user_file;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -29,16 +30,40 @@ class UserPanelController extends Controller
      */
     public function index()
     {
+        $user_id = Auth::user()->id;
 
-        //        calling  subject model and  get data of all subject
-        $subjects=new subjects();
-        $subjects=$subjects->all();
+        $data = DB::table('customers')->where('id', $user_id)->select("user_type")->first();
+        $user_type = $data->user_type;
 
-//        dd(Session::all());
-        //in subject vairable and pass it to view
-        return view("user-sections.user-subjects",compact('subjects'));
+        if($user_type== 2){
+            return view("user-sections.examiner");
+        }
+        else{
+            $subjects=new subjects();
+            $subjects=$subjects->all();
+            $result_view = false;
+            return view("user-sections.user-subjects",compact('subjects','result_view'));
+        }
     }
+    public function test_results(){
+        $user_id = Auth::user()->id;
 
+        $data = DB::table('customers')->where('id', $user_id)->select("user_type")->first();
+        $user_type = $data->user_type;
+
+        if($user_type== 2){
+            return view("user-sections.examiner");
+        }
+        else{
+            // $subjects=new subjects();
+            // $subjects=$subjects->all();
+            // "SELECT subjects.* FROM `subjects` INNER JOIN results ON subjects.id = results.subject_name WHERE results.user_id = 1";
+
+            $subjects = DB::table('subjects')->select('subjects.*')->join('results','subjects.id' ,'=' ,'results.subject_name')->where('results.user_id',$user_id)->get();
+            $result_view = true;
+            return view("user-sections.user-subjects",compact('subjects','result_view'));
+        }
+    }
     public function searchSubject(Request $request)
     {
 //        $q = Input::get ( 'q' );
@@ -65,7 +90,7 @@ class UserPanelController extends Controller
      */
     public function create()
     {
-        //
+        
     }
     public function displayTest(Request $request){
         //check user is able to give test
@@ -100,6 +125,10 @@ class UserPanelController extends Controller
                 ->where("q.subject_id","=",$request->id)->get();
             $i=0;
            // dd($questions);
+
+
+            $questions= $questions->shuffle();
+
             $timer=0;
             if($questions){
                 foreach ($questions as $q){
@@ -135,6 +164,7 @@ class UserPanelController extends Controller
 
             }
             else{
+
                 return view('user-sections.test-page',compact('questions','questions2','timer'));
             }
         }    
@@ -155,19 +185,17 @@ class UserPanelController extends Controller
         if(count($check)>0){
             return redirect('/user-subjects');
         }
-        $option=Input::except('_token','user-name');
+        $option=Input::except('_token','user-name','subject-name');
 //        $option=$request->all()->except('_token');
 //        dd(Input::except('password','avatar'));
+        
         $marks=0;
         $tmarks=0;
         $countertotal=0;
         $counterpass=0;
         $counterfail=0;
        foreach ($option as $op){
-
            $op=explode('__',$op);
-
-
 
            $username=$request->input('user-name');
 
@@ -183,6 +211,7 @@ class UserPanelController extends Controller
 
 
        }
+           
         $tmarks=$countertotal*5;
 
         $counterfail=abs($countertotal-$counterpass);
@@ -209,6 +238,39 @@ class UserPanelController extends Controller
 
 
         return view('user-sections.thankyou',compact('marks','username','countertotal','counterpass','counterfail'));
+    }
+
+    function uploadfile(Request $request){
+     // $validation = Validator::make($request->all(), [
+     //  'select_file' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+     // ]);
+     // if($validation->passes())
+     // {
+      $image = $request->file('select_file');
+      $new_name = rand() . '.' . $image->getClientOriginalExtension();
+      $image->move(public_path('images'), $new_name);
+      $user_id = Auth::user()->id;
+      $insert_arr = array("user_id"=>$user_id,'image_name' => $new_name);
+        user_file::create($insert_arr);
+
+      return response()->json([
+       'message'   => 'Image Upload Successfully',
+       'uploaded_image' => '<img src="/images/'.$new_name.'" class="img-thumbnail" width="300" />',
+       'class_name'  => 'alert-success'
+      ]);
+      
+
+        
+     // }
+     // else
+     // {
+
+      // return response()->json([
+      //  'message'   => $validation->errors()->all(),
+      //  'uploaded_image' => '',
+      //  'class_name'  => 'alert-danger'
+      // ]);
+     // }
     }
     /**
      * Store a newly created resource in storage.

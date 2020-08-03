@@ -15,6 +15,7 @@
                     <a class="nav-link"  href="javascript: void(0);" aria-expanded="false"><i class="fa fa-th-large"></i> <span class="toggle-none">Menu<span class="fa arrow"></span></span></a>
                     <ul class="nav-second-level nav flex-column " aria-expanded="false">
                         <li class="nav-item"><a class="nav-link" href="/user-subjects">Subjects</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/user-results">Results</a></li>
                     </ul>
                 </li>
 

@@ -7,9 +7,13 @@
                     <div class="widget widget-chart white-bg padding-0">
 
                         <div class="widget-title">
-
+                            @if (!$result_view)
                             <span class="label label-primary float-right take-test"><a href="{{route('take-test.route',['id'=>$s->id])}}">Take Test</a></span>
+                            @endif
+                            @if ($result_view)
                             <span class="label label-warning float-right mr-2 take-test"><a href="{{route('take-test.route',['id'=>$s->id])}}"><i class="fa fa-eye" aria-hidden="true"></i></a></span>
+                            @endif
+
                             <h2 class="margin-b-0">{{$s->subject_name}}</h2>
 
                         </div>

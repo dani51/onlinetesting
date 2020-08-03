@@ -51,7 +51,10 @@ class LoginController extends Controller
     {
         return view('customer.auth.login');
     }
-
+    public function redirectLogin(){
+        print_r("expression");
+        return redirect("customer/login");
+    }
     /**
      * Get the guard to be used during authentication.
      *

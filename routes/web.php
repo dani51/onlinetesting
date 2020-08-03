@@ -36,6 +36,8 @@ Route::post('/test-submission', 'UserPanelController@testSubmission');
 //Route::get('/take-test', 'UserPanelController@displayTest');
 //calling controller and its function
 Route::get('/user-subjects','UserPanelController@index')->name('user-subjects');
+Route::get('/user-results','UserPanelController@test_results')->name('user-results');
+
 Route::get('/search', 'UserPanelController@searchSubject')->name('search');
 Route::get('/take-test{id}',[
     'uses' => 'UserPanelController@displayTest',
@@ -57,6 +59,9 @@ Route::resource('subjects', 'subjectsController');
 
 Route::resource('questions', 'questionsController');
 Route::resource('options', 'optionsController');
+Route::post('/fetch_options', 'optionsController@fetch_options_group');
+Route::get('/delete_options/{id}', 'optionsController@destroy');
+
 
 Route::group(['prefix' => 'admin'], function () {
   Route::get('/login', 'AdminAuth\LoginController@showLoginForm')->name('login');
@@ -71,7 +76,10 @@ Route::group(['prefix' => 'admin'], function () {
   Route::post('/password/reset', 'AdminAuth\ResetPasswordController@reset')->name('password.email');
   Route::get('/password/reset', 'AdminAuth\ForgotPasswordController@showLinkRequestForm')->name('password.reset');
   Route::get('/password/reset/{token}', 'AdminAuth\ResetPasswordController@showResetForm');
+
+  
 });
+Route::get('/login', 'CustomerAuth\LoginController@redirectLogin')->name('login');
 
 Route::group(['prefix' => 'customer'], function () {
 //    Route::any('/search',function(){
@@ -90,3 +98,8 @@ Route::group(['prefix' => 'customer'], function () {
   Route::get('/password/reset', 'CustomerAuth\ForgotPasswordController@showLinkRequestForm')->name('password.reset');
   Route::get('/password/reset/{token}', 'CustomerAuth\ResetPasswordController@showResetForm');
 });
+
+//update route
+
+Route::post('/ajax_upload/action', 'UserPanelController@uploadfile')->name('ajaxupload.action');
+Route::post('/fetch_question', 'questionsController@fetch_question_group');

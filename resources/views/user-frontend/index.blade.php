@@ -168,5 +168,36 @@
     });
 
 </script>
+<script>
+$(document).ready(function(){
+
+ $('#upload_form').on('submit', function(event){
+  event.preventDefault();
+  $.ajax({
+   url:"{{ route('ajaxupload.action') }}",
+   method:"POST",
+   data:new FormData(this),
+   dataType:'JSON',
+   contentType: false,
+   cache: false,
+   processData: false,
+   success:function(data)
+   {
+    $('#message').css('display', 'block');
+    $('#message').html(data.message);
+    $('#message').addClass(data.class_name);
+    $('#uploaded_image').html(data.uploaded_image);
+     window.setTimeout(function(){
+
+        // Move to a new location or you can do something else
+        window.location.href = "";
+
+    }, 5000);
+   }
+  })
+ });
+
+});
+</script>
 </body>
 </html>

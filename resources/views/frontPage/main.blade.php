@@ -62,11 +62,11 @@
     <div class="container h-100">
         <div class="row h-100 align-items-center justify-content-center text-center">
             <div class="col-lg-10 align-self-end">
-                <h1 class="text-uppercase text-white font-weight-bold">Your Favorite Source of Free Bootstrap Themes</h1>
+                <h1 class="text-uppercase text-white font-weight-bold">Your Favorite Source of Free Online Testing System</h1>
                 <hr class="divider my-4">
             </div>
             <div class="col-lg-8 align-self-baseline">
-                <p class="text-white-75 font-weight-light mb-5">Start Bootstrap can help you build better websites using the Bootstrap framework! Just download a theme and start customizing, no strings attached!</p>
+                <p class="text-white-75 font-weight-light mb-5">we provide you the best  platform for conducting online examination!</p>
                 <a class="btn btn-primary btn-xl js-scroll-trigger" href="#about">Find Out More</a>
             </div>
         </div>
@@ -130,8 +130,8 @@
     <div class="container-fluid p-0">
         <div class="row no-gutters">
             <div class="col-lg-4 col-sm-6">
-                <a class="portfolio-box" href="{{asset('front/img/portfolio/fullsize/1.jpg')}}">
-                    <img class="img-fluid" src="{{asset('front/img/portfolio/thumbnails/1.jpg')}}" alt="">
+                <a class="portfolio-box" href="{{asset('front/img/portfolio/box-1.jpg')}}">
+                    <img class="img-fluid" src="{{asset('front/img/portfolio/box-1.jpg')}}" alt="">
                     <div class="portfolio-box-caption">
                         <div class="project-category text-white-50">
                             Category
@@ -143,8 +143,8 @@
                 </a>
             </div>
             <div class="col-lg-4 col-sm-6">
-                <a class="portfolio-box" href="{{asset('front/img/portfolio/fullsize/2.jpg')}}">
-                    <img class="img-fluid" src="{{asset('front/img/portfolio/thumbnails/2.jpg')}}" alt="">
+                <a class="portfolio-box" href="{{asset('front/img/portfolio/box-2.jpg')}}">
+                    <img class="img-fluid" src="{{asset('front/img/portfolio/box-2.jpg')}}" alt="">
                     <div class="portfolio-box-caption">
                         <div class="project-category text-white-50">
                             Category
@@ -156,8 +156,8 @@
                 </a>
             </div>
             <div class="col-lg-4 col-sm-6">
-                <a class="portfolio-box" href="{{asset('front/img/portfolio/fullsize/3.jpg')}}">
-                    <img class="img-fluid" src="{{asset('front/img/portfolio/thumbnails/3.jpg')}}" alt="">
+                <a class="portfolio-box" href="{{asset('front/img/portfolio/box-3.jpg')}}">
+                    <img class="img-fluid" src="{{asset('front/img/portfolio/box-3.jpg')}}" alt="">
                     <div class="portfolio-box-caption">
                         <div class="project-category text-white-50">
                             Category
@@ -169,8 +169,8 @@
                 </a>
             </div>
             <div class="col-lg-4 col-sm-6">
-                <a class="portfolio-box" href="{{asset('front/img/portfolio/fullsize/4.jpg')}}">
-                    <img class="img-fluid" src="{{asset('front/img/portfolio/thumbnails/4.jpg')}}" alt="">
+                <a class="portfolio-box" href="{{asset('front/img/portfolio/box-4.jpg')}}">
+                    <img class="img-fluid" src="{{asset('front/img/portfolio/box-4.jpg')}}" alt="">
                     <div class="portfolio-box-caption">
                         <div class="project-category text-white-50">
                             Category
@@ -182,8 +182,8 @@
                 </a>
             </div>
             <div class="col-lg-4 col-sm-6">
-                <a class="portfolio-box" href="{{asset('front/img/portfolio/fullsize/5.jpg')}}">
-                    <img class="img-fluid" src="{{asset('front/img/portfolio/thumbnails/5.jpg')}}" alt="">
+                <a class="portfolio-box" href="{{asset('front/img/portfolio/box-5.jpg')}}">
+                    <img class="img-fluid" src="{{asset('front/img/portfolio/box-5.jpg')}}" alt="">
                     <div class="portfolio-box-caption">
                         <div class="project-category text-white-50">
                             Category
@@ -195,8 +195,8 @@
                 </a>
             </div>
             <div class="col-lg-4 col-sm-6">
-                <a class="portfolio-box" href="{{asset('front/img/portfolio/fullsize/6.jpg')}}">
-                    <img class="img-fluid" src="{{asset('front/img/portfolio/thumbnails/6.jpg')}}" alt="">
+                <a class="portfolio-box" href="{{asset('front/img/portfolio/box-1.jpg')}}">
+                    <img class="img-fluid" src="{{asset('front/img/portfolio/box-1.jpg')}}" alt="">
                     <div class="portfolio-box-caption p-3">
                         <div class="project-category text-white-50">
                             Category

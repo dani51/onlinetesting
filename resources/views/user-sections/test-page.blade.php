@@ -1,5 +1,10 @@
 @extends("user-frontend.index")
 @section("content")
+<style type="text/css">
+    #test_form .quest-div:not(:first-of-type) {
+        display: none;
+    }
+</style>
     <div class="row">
 
 {{--        @if (!empty($subjects))--}}
@@ -12,7 +17,7 @@
         <p class="pull-right">Total Time : <span id="time">60:00</span> minutes</p>
     </div>
 
-                    <form class="form-group" method="post" action="/test-submission">
+                    <form class="form-group" method="post" id="test_form" action="/test-submission">
 
                         <input type="hidden" name="user-name" value="{!! Auth::user()->id !!}">
 
@@ -32,7 +37,7 @@
                                 <input type="hidden" name="subject-name" value="{{$qu->id}}">
                                 @endif
 
-                                <div class="container">
+                                <div class="container quest-div">
                                     <div class="question-div">Question {{$i}} :<p>   {{$qu->question_name}}</p></div>
                                     <div class="radio-div">
                                         <div class="radio radio-info" >
@@ -55,6 +60,9 @@
                                             @endforeach
                                         </div>
                                     </div>
+                                    <div class="action-btn">
+                                        <button type="button" class="btn btn-primary next" >Next</button>
+                                    </div>
                                 </div>
                                             @php
                                                 $timer=$qu->subject_test_time;
@@ -68,7 +76,7 @@
                         @endif
 
 
-                        <button class="btn btn-primary test-submit" type="submit">Submit Test</button>
+                        
 
                     </form>
 
@@ -140,6 +148,70 @@
 
 
         </script>
+
+        <script type="text/javascript">
+            var current_fs, next_fs, previous_fs; //fieldsets
+        var left, opacity, scale; //fieldset properties which we will animate
+        var animating; //flag to prevent quick multi-click glitches
+        var numItems = $('.quest-div').length;
+        var counter = 1;
+        $(".next").click(function(){
+            if(animating) return false;
+            animating = true;
+            
+            current_fs = $(this).parent().parent();
+            next_fs = $(this).parent().parent().next();
+           
+            
+            //show the next fieldset
+            next_fs.show(); 
+            
+            
+            console.log(counter);
+            if(counter === numItems -1){
+                $(".action-btn").empty();
+                var btn_submit = '<button class="btn btn-primary test-submit" type="submit">Submit Test</button>';
+                $(".action-btn").append(btn_submit);
+            }
+            counter++;
+
+            //hide the current fieldset with style
+            current_fs.animate({opacity: 0}, {
+                step: function(now, mx) {
+                    //as the opacity of current_fs reduces to 0 - stored in "now"
+                    //1. scale current_fs down to 80%
+                    scale = 1 - (1 - now) * 0.2;
+                    //2. bring next_fs from the right(50%)
+                    left = (now * 50)+"%";
+                    //3. increase opacity of next_fs to 1 as it moves in
+                    opacity = 1 - now;
+                    current_fs.css({
+                        'transform': 'scale('+scale+')',
+                        'position': 'absolute'
+                    });
+                    next_fs.css({'left': left, 'opacity': opacity});
+                }, 
+                duration: 800, 
+                complete: function(){
+                    current_fs.hide();
+                    animating = false;
+                }, 
+               
+            });
+        });
+
+        
+        
+
+        </script>
+        <script type="text/javascript">
+            
+        window.onbeforeunload = function() {
+            $("form").submit();
+            return "changes not saved";
+        }
+</script>
+        
     </div>
 @endsection
 
